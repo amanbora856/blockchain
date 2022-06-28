@@ -1,0 +1,51 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract locker
+{
+    address  lockeraddress;
+constructor()
+{
+    lockeraddress=msg.sender;
+}
+event balance(address fromlocker,string message,address toowner);
+    uint totalmoney=0;
+    address payable sender_address;
+    function addBalance()public  
+    {
+        totalmoney+=(msg.value/1 ether);
+        //sender_address=payable(msg.sender);
+    }
+    function totalbalance()public view returns(uint)
+    {
+        return totalmoney;
+    }
+    function withdraw(uint amount)public 
+    {
+        string memory value;
+        uint temp=totalmoney;
+        if(amount==temp)
+        {
+            value="cannot withdraw in a single go";
+            emit balance(lockeraddress,value,sender_address);
+        }
+        else if(amount>totalmoney)
+        {
+            value="INSUFFICIENT FUNDS";
+            emit balance(lockeraddress,value,sender_address);
+        }
+        else if(amount<totalmoney&&amount!=0)
+        {
+            value="Transaction successfull";
+            totalmoney=totalmoney-amount;
+            emit balance(lockeraddress,value,sender_address);
+        }
+        else if(amount==0)
+        {
+            value="write a valid amount to withdraw";
+            emit balance(lockeraddress,value,sender_address);
+
+        }
+        
+    }
+}
